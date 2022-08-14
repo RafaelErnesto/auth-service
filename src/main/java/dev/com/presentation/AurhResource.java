@@ -1,7 +1,7 @@
 package dev.com.presentation;
 
-import dev.com.dtos.AddUserRequestDto;
-import dev.com.usecases.AddUserUseCase;
+import dev.com.presentation.dtos.AddUserRequestDto;
+import dev.com.application.usecases.AddUserUseCase;
 
 import javax.inject.Inject;
 import javax.validation.Valid;

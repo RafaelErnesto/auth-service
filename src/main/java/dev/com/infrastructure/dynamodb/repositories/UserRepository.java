@@ -1,6 +1,6 @@
-package dev.com.repositories;
+package dev.com.infrastructure.dynamodb.repositories;
 
-import dev.com.dtos.AddUserRequestDto;
+import dev.com.presentation.dtos.AddUserRequestDto;
 
 import javax.enterprise.context.ApplicationScoped;
 

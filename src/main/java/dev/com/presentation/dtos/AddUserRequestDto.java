@@ -1,4 +1,4 @@
-package dev.com.dtos;
+package dev.com.presentation.dtos;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.validation.constraints.Email;
