@@ -1,8 +1,8 @@
 package application.usecases;
 
 import dev.com.application.usecases.AddUserUseCase;
+import dev.com.application.usecases.Repository;
 import dev.com.domain.entities.User;
-import dev.com.infrastructure.data.repositories.dynamodb.UserRepository;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Assertions;
@@ -18,11 +18,20 @@ public class AddUserUseCaseTest {
     AddUserUseCase addUserUseCase;
 
     @InjectMock
-    UserRepository userRepository;
+    Repository userRepository;
 
     @Test
     void addUserThrowsWhenUserExists(){
-        Mockito.when(userRepository.get("")).thenReturn(null);
-        Assertions.assertThrows(Exception.class, () -> addUserUseCase.execute(new User("Joseph", "j@mail.com","123456","jh")));
+        User user = new User("Joseph", "j@mail.com","123456","jh");
+        Mockito.when(userRepository.get(user.getEmail())).thenReturn(user);
+        Assertions.assertThrows(Exception.class, () -> addUserUseCase.execute(user));
+    }
+
+    @Test
+    void addUserInsertsWhenUserIsOK(){
+        User user = new User("Joseph", "j@mail.com","123456","jh");
+        Mockito.when(userRepository.get(user.getEmail())).thenReturn(null);
+        addUserUseCase.execute(user);
+        Mockito.verify(userRepository).insert(user);
     }
 }
