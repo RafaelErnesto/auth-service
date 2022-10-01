@@ -11,7 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/auth")
-public class AurhResource {
+public class AuthResource {
 
     @Inject
     AddUserUseCase addUserUseCase;
@@ -20,6 +20,7 @@ public class AurhResource {
     @Path("/user")
     @Produces(MediaType.TEXT_PLAIN)
     public String addUser(@Valid AddUserRequestDto addUserRequest) {
-        return addUserUseCase.execute(addUserRequest);
+       // return addUserUseCase.execute(addUserRequest);
+        return "";
     }
 }
