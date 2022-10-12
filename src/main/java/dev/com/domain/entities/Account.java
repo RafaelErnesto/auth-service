@@ -1,10 +1,10 @@
 package dev.com.domain.entities;
 
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 
-public class User {
-
+public class Account {
     public String getEmail() {
         return email;
     }
@@ -26,23 +26,27 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = hashPassword(password);
+        this.password = password;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     String email;
     String name;
     String password;
+    String username;
 
-    public User(String name, String email)  {
+    public Account(String name, String email, String password, String username)  {
         this.email = email;
         this.name = name;
-    }
-
-    public User(String name, String email, String password)  {
-        this.email = email;
-        this.name = name;
-        this.password = password;
+        this.username = username;
+        this.password = hashPassword(password);
     }
 
     private String hashPassword(String pwd)  {
@@ -67,4 +71,9 @@ public class User {
     public Boolean validatePassword(String password) {
         return hashPassword(password).equals(this.password);
     }
+
+    public User toUser(){
+        return new User(this.name, this.email, this.password);
+    }
 }
+

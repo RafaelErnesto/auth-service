@@ -1,22 +1,23 @@
 package dev.com.application.usecases;
 
+import dev.com.domain.entities.Account;
 import dev.com.domain.entities.User;
+import dev.com.infrastructure.data.repositories.dynamodb.UserRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class AddUserUseCase {
+public class AddAUserUseCase {
 
     Repository userRepository;
-    AddUserUseCase(Repository userRepository) {
+    AddAUserUseCase(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     public void execute(User input) {
-        if(this.userAlreadyExists(input.getEmail())){
-            throw new RuntimeException("User already exists");
+        if(!this.userAlreadyExists(input.getEmail())){
+            this.userRepository.insert(input);
         }
-        this.userRepository.insert(input);
     }
 
     private boolean userAlreadyExists(String email){
