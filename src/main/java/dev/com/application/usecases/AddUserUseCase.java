@@ -1,16 +1,15 @@
 package dev.com.application.usecases;
 
-import dev.com.domain.entities.Account;
 import dev.com.domain.entities.User;
 import dev.com.infrastructure.data.repositories.dynamodb.UserRepository;
 
 import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class AddAUserUseCase {
+public class AddUserUseCase {
 
     Repository userRepository;
-    AddAUserUseCase(UserRepository userRepository) {
+    AddUserUseCase(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

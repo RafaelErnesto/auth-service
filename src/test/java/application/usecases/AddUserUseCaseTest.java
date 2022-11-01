@@ -1,6 +1,6 @@
 package application.usecases;
 
-import dev.com.application.usecases.AddAUserUseCase;
+import dev.com.application.usecases.AddUserUseCase;
 import dev.com.application.usecases.Repository;
 import dev.com.domain.entities.Account;
 import io.quarkus.test.junit.QuarkusTest;
@@ -12,10 +12,10 @@ import org.mockito.Mockito;
 import javax.inject.Inject;
 
 @QuarkusTest
-public class AddAUserUseCaseTest {
+public class AddUserUseCaseTest {
 
     @Inject
-    AddAUserUseCase addAUserUseCase;
+    AddUserUseCase addUserUseCase;
 
     @InjectMock
     Repository userRepository;
@@ -24,14 +24,14 @@ public class AddAUserUseCaseTest {
     void addUserThrowsWhenUserExists(){
         Account account = new Account("Joseph", "j@mail.com","123456","jh");
         Mockito.when(userRepository.get(account.getEmail())).thenReturn(account);
-        Assertions.assertThrows(Exception.class, () -> addAUserUseCase.execute(account));
+        Assertions.assertThrows(Exception.class, () -> addUserUseCase.execute(account.toUser()));
     }
 
     @Test
     void addUserInsertsWhenUserIsOK(){
         Account account = new Account("Joseph", "j@mail.com","123456","jh");
         Mockito.when(userRepository.get(account.getEmail())).thenReturn(null);
-        addAUserUseCase.execute(account);
+        addUserUseCase.execute(account.toUser());
         Mockito.verify(userRepository).insert(account);
     }
 }

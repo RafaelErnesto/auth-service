@@ -1,10 +1,12 @@
 package dev.com.presentation;
 
-import dev.com.presentation.dtos.AddUserRequestDto;
-import dev.com.application.usecases.AddAUserUseCase;
+import dev.com.application.usecases.LoginResponseDto;
+import dev.com.application.usecases.LoginUseCase;
+import dev.com.application.usecases.LoginRequestDto;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -14,13 +16,13 @@ import javax.ws.rs.core.MediaType;
 public class AuthResource {
 
     @Inject
-    AddAUserUseCase addAUserUseCase;
+    LoginUseCase loginUseCase;
 
     @POST
     @Path("/login")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String addUser(@Valid AddUserRequestDto addUserRequest) {
-       // return addUserUseCase.execute(addUserRequest);
-        return "";
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public LoginResponseDto login(@Valid LoginRequestDto loginRequest) {
+       return loginUseCase.execute(loginRequest);
     }
 }

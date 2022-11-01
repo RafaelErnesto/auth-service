@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+  auth-service-dynamo:
+    image: amazon/dynamodb-local:1.19.0
+    container_name: auth-service-dynamo
+    ports:
+      - 4566:8000
+    command: -jar DynamoDBLocal.jar -inMemory -sharedDb
+
+  aws-cli:
+    image: amazon/aws-cli
+    depends_on:
+      - auth-service-dynamo
+    environment:
+      AWS_DEFAULT_PROFILE: default
+      AWS_DYNAMO_TABLE_NAME: auth-service
+      AWS_ENDPOINT_URL: http://auth-service-dynamo:8000
+    entrypoint: /bin/bash -c
+    volumes:
+      - './local-database:/local-database'
+    command: | 
+      - /local-database/initialize.sh
+    network_mode: service:auth-service-dynamo
+

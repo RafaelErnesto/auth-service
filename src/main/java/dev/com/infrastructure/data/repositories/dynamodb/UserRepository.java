@@ -1,6 +1,7 @@
 package dev.com.infrastructure.data.repositories.dynamodb;
 
 import dev.com.application.usecases.Repository;
+import dev.com.domain.entities.Status;
 import dev.com.domain.entities.User;
 import dev.com.infrastructure.config.AuthConfigProperties;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
@@ -32,7 +33,7 @@ public class UserRepository implements Repository {
     }
 
     @Override
-    public <String, User> User get(String key) {
+    public <LoginRequestDto, User> User get(LoginRequestDto request) {
         return null;
     }
 
@@ -41,7 +42,7 @@ public class UserRepository implements Repository {
         item.put("email", AttributeValue.builder().s(user.getEmail()).build());
         item.put("name", AttributeValue.builder().s(user.getName()).build());
         item.put("password", AttributeValue.builder().s(user.getPassword()).build());
-        item.put("status", AttributeValue.builder().s("active").build());
+        item.put("status", AttributeValue.builder().s(Status.PENDING.name()).build());
         item.put("created_at", AttributeValue.builder().s(LocalDateTime.now().toString()).build());
 
         return PutItemRequest.builder()
