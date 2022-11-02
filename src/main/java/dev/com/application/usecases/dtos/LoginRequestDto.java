@@ -1,4 +1,4 @@
-package dev.com.application.usecases;
+package dev.com.application.usecases.dtos;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;

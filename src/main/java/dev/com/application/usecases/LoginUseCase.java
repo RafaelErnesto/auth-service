@@ -1,7 +1,9 @@
 package dev.com.application.usecases;
 
+import dev.com.application.usecases.dtos.LoginRequestDto;
+import dev.com.application.usecases.dtos.LoginResponseDto;
 import dev.com.domain.entities.User;
-import dev.com.infrastructure.data.repositories.dynamodb.UserRepository;
+import dev.com.infrastructure.data.repositories.dynamodb.CreateUserRepositoryImpl;
 import io.smallrye.jwt.build.Jwt;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -15,7 +17,7 @@ public class LoginUseCase {
     @Inject
     Repository repository;
 
-    LoginUseCase(UserRepository repository){
+    LoginUseCase(CreateUserRepositoryImpl repository){
         this.repository = repository;
     }
 

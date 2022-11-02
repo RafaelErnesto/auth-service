@@ -1,6 +1,5 @@
 package dev.com.domain.entitties;
 
-import dev.com.domain.entities.Account;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

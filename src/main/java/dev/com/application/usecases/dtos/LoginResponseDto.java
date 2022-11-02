@@ -1,4 +1,4 @@
-package dev.com.application.usecases;
+package dev.com.application.usecases.dtos;
 
 public class LoginResponseDto {
     String token;

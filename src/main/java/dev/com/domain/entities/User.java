@@ -1,9 +1,20 @@
 package dev.com.domain.entities;
 
-import java.math.BigInteger;
-import java.security.MessageDigest;
+import dev.com.domain.Password;
 
 public class User {
+
+    String email;
+    String name;
+    Password password;
+
+    String userId;
+
+    public User(String name, String email, String password)  {
+        this.email = email;
+        this.name = name;
+        this.password = new Password(password);
+    }
 
     public String getEmail() {
         return email;
@@ -22,49 +33,14 @@ public class User {
     }
 
     public String getPassword() {
-        return password;
+        return password.getPasswordHash();
     }
 
-    public void setPassword(String password) {
-        this.password = hashPassword(password);
+    public String getUserId(){
+        return userId;
     }
-
-
-    String email;
-    String name;
-    String password;
-
-    public User(String name, String email)  {
-        this.email = email;
-        this.name = name;
-    }
-
-    public User(String name, String email, String password)  {
-        this.email = email;
-        this.name = name;
-        this.password = password;
-    }
-
-    private String hashPassword(String pwd)  {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(pwd.getBytes("UTF-8"));
-            BigInteger number = new BigInteger(1, hash);
-            StringBuilder hexString = new StringBuilder(number.toString(16));
-
-            while (hexString.length() < 64)
-            {
-                hexString.insert(0, '0');
-            }
-
-            return hexString.toString();
-        }catch(Exception ex) {
-            ex.printStackTrace();
-            throw new RuntimeException();
-        }
-    }
-
     public Boolean validatePassword(String password) {
-        return hashPassword(password).equals(this.password);
+        Password pwdToCompare = new Password(password);
+        return pwdToCompare.getPasswordHash().equals(this.password);
     }
 }

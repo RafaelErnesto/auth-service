@@ -1,6 +1,6 @@
 package dev.com.infrastructure.data.repositories.dynamodb;
 
-import dev.com.application.usecases.Repository;
+import dev.com.application.usecases.CreateUserRepository;
 import dev.com.domain.entities.Status;
 import dev.com.domain.entities.User;
 import dev.com.infrastructure.config.AuthConfigProperties;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ApplicationScoped
-public class UserRepository implements Repository {
+public class CreateUserRepositoryImpl implements CreateUserRepository  {
 
     @Inject
     DynamoDbClient dynamoDB;
@@ -32,10 +32,6 @@ public class UserRepository implements Repository {
         dynamoDB.putItem(putRequest((dev.com.domain.entities.User) input));
     }
 
-    @Override
-    public <LoginRequestDto, User> User get(LoginRequestDto request) {
-        return null;
-    }
 
     private PutItemRequest putRequest(User user) {
         Map<String, AttributeValue> item = new HashMap<>();

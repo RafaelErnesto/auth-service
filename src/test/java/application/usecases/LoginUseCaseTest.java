@@ -1,10 +1,10 @@
 package application.usecases;
 
-import dev.com.application.usecases.LoginResponseDto;
+import dev.com.application.usecases.dtos.LoginResponseDto;
 import dev.com.application.usecases.LoginUseCase;
 import dev.com.domain.entities.User;
-import dev.com.infrastructure.data.repositories.dynamodb.UserRepository;
-import dev.com.application.usecases.LoginRequestDto;
+import dev.com.infrastructure.data.repositories.dynamodb.CreateUserRepositoryImpl;
+import dev.com.application.usecases.dtos.LoginRequestDto;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Assertions;
@@ -20,7 +20,7 @@ public class LoginUseCaseTest {
     LoginUseCase loginUseCase;
 
     @InjectMock
-    UserRepository repository;
+    CreateUserRepositoryImpl repository;
 
     @Test
     public void whenUserDoesNotExistThrows(){
