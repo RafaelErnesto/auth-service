@@ -3,8 +3,8 @@ package application.usecases;
 import dev.com.application.usecases.dtos.LoginResponseDto;
 import dev.com.application.usecases.LoginUseCase;
 import dev.com.domain.entities.User;
-import dev.com.infrastructure.data.repositories.dynamodb.CreateUserRepositoryImpl;
 import dev.com.application.usecases.dtos.LoginRequestDto;
+import dev.com.infrastructure.data.repositories.dynamodb.UserRepositoryImpl;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Assertions;
@@ -20,13 +20,14 @@ public class LoginUseCaseTest {
     LoginUseCase loginUseCase;
 
     @InjectMock
-    CreateUserRepositoryImpl repository;
+    UserRepositoryImpl repository;
 
     @Test
-    public void whenUserDoesNotExistThrows(){
+    public void whenUserWasNotFoundThrows(){
         Mockito.when(repository.get(Mockito.any())).thenReturn(null);
         Assertions.assertThrows(RuntimeException.class, () -> {loginUseCase.execute(Mockito.any());});
     }
+
 
     @Test
     public void whenEmailAndPasswordIsCorrectReturnsToken(){

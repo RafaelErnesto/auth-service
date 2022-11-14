@@ -1,5 +1,7 @@
 package dev.com.application.usecases.dtos;
 
+import dev.com.domain.entities.User;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
@@ -12,5 +14,9 @@ public class LoginRequestDto {
     public LoginRequestDto(String email, String password){
         this.email = email;
         this.password = password;
+    }
+
+    public User toUser(){
+        return new User("", email, password);
     }
 }
