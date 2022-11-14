@@ -22,6 +22,7 @@ public class CreateConfirmationHashUseCase {
             confirmationHashRepository.insert(confirmationHash);
             return confirmationHash;
         } catch (Exception ex){
+
             throw new CreateConfirmationHashException("Error while creating hash");
         }
     }
