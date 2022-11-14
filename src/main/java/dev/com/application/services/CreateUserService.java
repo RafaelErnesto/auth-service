@@ -1,5 +1,6 @@
 package dev.com.application.services;
 
+import dev.com.application.exceptions.CreateUserException;
 import dev.com.application.usecases.CreateConfirmationHashUseCase;
 import dev.com.application.usecases.CreateUserUseCase;
 import dev.com.application.usecases.UserCreationEventEmitter;
@@ -26,7 +27,7 @@ public class CreateUserService {
             ConfirmationHash confirmationHash = createConfirmationHashUseCase.execute(input);
             userCreationEventEmitter.execute(confirmationHash);
         }catch(Exception ex){
-
+            throw new CreateUserException("Error while creating the user");
         }
     }
 }
