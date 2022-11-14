@@ -1,4 +1,4 @@
-package dev.com.application.usecases.dtos;
+package dev.com.presentation.dtos;
 
 import dev.com.domain.entities.User;
 

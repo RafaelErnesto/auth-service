@@ -2,8 +2,8 @@ package dev.com.presentation;
 
 import dev.com.application.services.CreateUserService;
 import dev.com.application.usecases.*;
-import dev.com.application.usecases.dtos.CreateUserRequestDto;
-import dev.com.application.usecases.dtos.LoginRequestDto;
+import dev.com.presentation.dtos.CreateUserRequestDto;
+import dev.com.presentation.dtos.LoginRequestDto;
 import dev.com.application.usecases.dtos.LoginResponseDto;
 
 import javax.inject.Inject;

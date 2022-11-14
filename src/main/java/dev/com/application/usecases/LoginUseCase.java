@@ -1,7 +1,6 @@
 package dev.com.application.usecases;
 
 import dev.com.application.Repository;
-import dev.com.application.usecases.dtos.LoginRequestDto;
 import dev.com.application.usecases.dtos.LoginResponseDto;
 import dev.com.domain.entities.User;
 import io.smallrye.jwt.build.Jwt;

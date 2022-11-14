@@ -3,7 +3,7 @@ package application.usecases;
 import dev.com.application.usecases.dtos.LoginResponseDto;
 import dev.com.application.usecases.LoginUseCase;
 import dev.com.domain.entities.User;
-import dev.com.application.usecases.dtos.LoginRequestDto;
+import dev.com.presentation.dtos.LoginRequestDto;
 import dev.com.infrastructure.data.repositories.dynamodb.UserRepositoryImpl;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
