@@ -41,6 +41,6 @@ public class User {
     }
     public Boolean validatePassword(String password) {
         Password pwdToCompare = new Password(password);
-        return pwdToCompare.getPasswordHash().equals(this.password);
+        return pwdToCompare.equals(this.password);
     }
 }

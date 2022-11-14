@@ -19,13 +19,13 @@ public class LoginUseCase {
     @Named("userRepository")
     Repository userRepository;
 
-    public LoginResponseDto execute(LoginRequestDto request){
-        User foundUser = findUser(request);
+    public LoginResponseDto execute(User user){
+        User foundUser = findUser(user);
         return generateLoginResponse(foundUser);
     }
 
-    private User findUser(LoginRequestDto request){
-        User foundUser = userRepository.get(request);
+    private User findUser(User user){
+        User foundUser = userRepository.get(user);
         if(foundUser == null){
             throw new RuntimeException("Incorrect email or password!");
         }

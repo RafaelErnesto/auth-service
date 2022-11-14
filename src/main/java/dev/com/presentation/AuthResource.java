@@ -28,7 +28,7 @@ public class AuthResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public LoginResponseDto login(@Valid LoginRequestDto loginRequest) {
-       return loginUseCase.execute(loginRequest);
+       return loginUseCase.execute(loginRequest.toUser());
     }
 
     @POST
