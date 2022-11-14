@@ -1,6 +1,4 @@
-package dev.com.application.usecases;
-
-import dev.com.domain.entities.User;
+package dev.com.domain.entities;
 
 public class ConfirmationHash {
     String value;
@@ -8,7 +6,7 @@ public class ConfirmationHash {
 
     String userId;
 
-    ConfirmationHash(User user){
+    public ConfirmationHash(User user){
         status = "VALID";
         value = "";
         this.userId = user.getUserId();

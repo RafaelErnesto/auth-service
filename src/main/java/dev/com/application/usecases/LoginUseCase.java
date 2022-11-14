@@ -1,13 +1,14 @@
 package dev.com.application.usecases;
 
+import dev.com.application.Repository;
 import dev.com.application.usecases.dtos.LoginRequestDto;
 import dev.com.application.usecases.dtos.LoginResponseDto;
 import dev.com.domain.entities.User;
-import dev.com.infrastructure.data.repositories.dynamodb.CreateUserRepositoryImpl;
 import io.smallrye.jwt.build.Jwt;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -15,11 +16,8 @@ import java.util.HashSet;
 public class LoginUseCase {
 
     @Inject
-    Repository repository;
-
-    LoginUseCase(CreateUserRepositoryImpl repository){
-        this.repository = repository;
-    }
+    @Named("userRepository")
+    Repository userRepository;
 
     public LoginResponseDto execute(LoginRequestDto request){
         User foundUser = findUser(request);
@@ -27,7 +25,7 @@ public class LoginUseCase {
     }
 
     private User findUser(LoginRequestDto request){
-        User foundUser = repository.get(request);
+        User foundUser = userRepository.get(request);
         if(foundUser == null){
             throw new RuntimeException("Incorrect email or password!");
         }

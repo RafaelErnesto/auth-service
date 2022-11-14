@@ -1,7 +1,7 @@
 package application.usecases;
 
 import dev.com.application.usecases.CreateUserUseCase;
-import dev.com.application.usecases.Repository;
+import dev.com.application.Repository;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.mockito.InjectMock;
 import org.junit.jupiter.api.Assertions;
