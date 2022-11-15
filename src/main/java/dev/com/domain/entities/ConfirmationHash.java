@@ -1,33 +1,32 @@
 package dev.com.domain.entities;
 
+import dev.com.domain.HashStatus;
+
 import java.util.UUID;
 
 public class ConfirmationHash {
     String value;
-    String status;
+    HashStatus status;
 
     String userId;
 
     public ConfirmationHash(User user){
-        status = "VALID";
+        status = HashStatus.VALID;
         value = generateHash();
-        this.userId = user.getUserId();
+        userId = user.getUserId();
     }
 
     public String getValue() {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
 
-    public String getStatus() {
+    public HashStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setInvalid() {
+        status = HashStatus.INVALID;
     }
 
     private String generateHash(){

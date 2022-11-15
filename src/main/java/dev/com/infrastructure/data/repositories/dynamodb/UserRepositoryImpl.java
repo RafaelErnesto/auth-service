@@ -1,7 +1,7 @@
 package dev.com.infrastructure.data.repositories.dynamodb;
 
 import dev.com.application.Repository;
-import dev.com.domain.entities.Status;
+import dev.com.domain.UserStatus;
 import dev.com.domain.entities.User;
 import dev.com.infrastructure.config.AuthConfigProperties;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
@@ -45,7 +45,7 @@ public class UserRepositoryImpl implements Repository {
         item.put("email", AttributeValue.builder().s(user.getEmail()).build());
         item.put("name", AttributeValue.builder().s(user.getName()).build());
         item.put("password", AttributeValue.builder().s(user.getPassword()).build());
-        item.put("status", AttributeValue.builder().s(Status.PENDING.name()).build());
+        item.put("status", AttributeValue.builder().s(UserStatus.PENDING.name()).build());
         item.put("created_at", AttributeValue.builder().s(LocalDateTime.now().toString()).build());
 
         return PutItemRequest.builder()
