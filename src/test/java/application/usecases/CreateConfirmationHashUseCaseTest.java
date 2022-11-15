@@ -1,5 +1,6 @@
 package application.usecases;
 
+import dev.com.application.exceptions.CreateConfirmationHashException;
 import dev.com.application.usecases.CreateConfirmationHashUseCase;
 import dev.com.domain.entities.ConfirmationHash;
 import dev.com.domain.entities.User;
@@ -27,5 +28,12 @@ public class CreateConfirmationHashUseCaseTest {
         ConfirmationHash returnedHash = sut.execute(mockedUser);
         Assertions.assertTrue(returnedHash.getValue().length() > 0);
         Mockito.verify(confirmationHashRepository).insert(returnedHash);
+    }
+
+    @Test
+    void shouldThrowCreateConfirmationHashExceptionWhenAnErrorOccurs(){
+        User mockedUser = new User("dummy", "dummy@mail.com","123456");
+        Mockito.doThrow(RuntimeException.class).when(confirmationHashRepository).insert(Mockito.any());
+        Assertions.assertThrows(CreateConfirmationHashException.class, () -> {sut.execute(mockedUser);});
     }
 }
