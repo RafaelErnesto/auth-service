@@ -4,5 +4,5 @@ import io.smallrye.config.ConfigMapping;
 
 @ConfigMapping(prefix = "auth")
 public interface AuthConfigProperties {
-    public String tableName();
+    public String userTableName();
 }

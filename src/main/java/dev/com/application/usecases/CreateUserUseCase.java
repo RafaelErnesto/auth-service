@@ -2,6 +2,7 @@ package dev.com.application.usecases;
 
 import dev.com.application.Repository;
 import dev.com.domain.entities.User;
+import dev.com.infrastructure.data.repositories.dynamodb.UserRepositoryImpl;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -11,8 +12,7 @@ import javax.inject.Named;
 public class CreateUserUseCase {
 
     @Inject
-    @Named("userRepository")
-    Repository userRepository;
+    UserRepositoryImpl userRepository;
 
     public void execute(User input) {
         if(this.userAlreadyExists(input.getEmail())){

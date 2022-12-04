@@ -1,8 +1,8 @@
 package dev.com.application;
 
-public interface Repository {
+public interface Repository<T> {
 
-    <T> void insert(T input);
+    void insert(T input);
 
-    <I,O> O get(I key);
+    <I> T get(I key);
 }

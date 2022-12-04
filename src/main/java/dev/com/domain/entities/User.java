@@ -1,6 +1,7 @@
 package dev.com.domain.entities;
 
 import dev.com.domain.Password;
+import dev.com.domain.UserId;
 import dev.com.domain.UserStatus;
 
 public class User {
@@ -8,14 +9,18 @@ public class User {
     String email;
     String name;
     Password password;
-    String userId;
+    UserId userId;
     UserStatus status;
-
+    public User(String name, String email){
+        this.name = name;
+        this.email = email;
+    };
     public User(String name, String email, String password)  {
         this.email = email;
         this.name = name;
         this.status = UserStatus.PENDING;
         this.password = new Password(password);
+        this.userId = new UserId();
     }
 
     public String getEmail() {
@@ -39,7 +44,15 @@ public class User {
     }
 
     public String getUserId(){
-        return userId;
+        return userId.getUserId();
+    }
+
+    public void setUserId(String userId){
+        if(this.userId != null){
+            throw new RuntimeException("Cannot reset user id");
+        }
+
+        this.userId = new UserId(userId);
     }
 
     public UserStatus getStatus() {

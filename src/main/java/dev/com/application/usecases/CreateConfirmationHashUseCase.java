@@ -4,6 +4,7 @@ import dev.com.application.Repository;
 import dev.com.application.exceptions.CreateConfirmationHashException;
 import dev.com.domain.entities.ConfirmationHash;
 import dev.com.domain.entities.User;
+import dev.com.infrastructure.data.repositories.dynamodb.ConfirmationHashRepositoryImpl;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -14,7 +15,7 @@ public class CreateConfirmationHashUseCase {
 
     @Inject
     @Named("confirmationHashRepository")
-    Repository confirmationHashRepository;
+    ConfirmationHashRepositoryImpl confirmationHashRepository;
 
     public ConfirmationHash execute(User user){
         try {

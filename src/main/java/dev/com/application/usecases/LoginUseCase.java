@@ -3,6 +3,7 @@ package dev.com.application.usecases;
 import dev.com.application.Repository;
 import dev.com.application.usecases.dtos.LoginResponseDto;
 import dev.com.domain.entities.User;
+import dev.com.infrastructure.data.repositories.dynamodb.UserRepositoryImpl;
 import io.smallrye.jwt.build.Jwt;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -15,8 +16,8 @@ import java.util.HashSet;
 public class LoginUseCase {
 
     @Inject
-    @Named("userRepository")
-    Repository userRepository;
+    //@Named("userRepository")
+    UserRepositoryImpl userRepository;
 
     public LoginResponseDto execute(User user){
         User foundUser = findUser(user);
