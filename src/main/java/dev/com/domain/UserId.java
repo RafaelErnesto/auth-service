@@ -1,7 +1,5 @@
 package dev.com.domain;
 
-import dev.com.domain.entities.User;
-
 import java.util.UUID;
 
 public class UserId {
