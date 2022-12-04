@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class UsersDynamoDbTableTestResourceLifeCycleManager extends DynamoDbLifeCycleManager {
+public class ConfirmationHashDynamoDbTableTestResourceLifeCycManager extends DynamoDbLifeCycleManager {
 
     @Override
     public Map<String, String> start() {
         return Map.of(
-                "auth.user-table-name", getDynamoContainerTableName(),
+                "auth.confirmation-hash-table-name", getDynamoContainerTableName(),
                 "quarkus.dynamodb.endpoint-override", "http://localhost:"+getContainerPort());
     }
 
@@ -28,13 +28,15 @@ public class UsersDynamoDbTableTestResourceLifeCycleManager extends DynamoDbLife
 
 
     private String createTable(AmazonDynamoDB client) {
-        String tableName = "user-table-test";
+        String tableName = "confirmation-hash-table-test";
 
         List<AttributeDefinition> attributeDefinitions= new ArrayList<AttributeDefinition>();
-        attributeDefinitions.add(new AttributeDefinition().withAttributeName("email").withAttributeType("S"));
+        attributeDefinitions.add(new AttributeDefinition().withAttributeName("hash").withAttributeType("S"));
+        //attributeDefinitions.add(new AttributeDefinition().withAttributeName("created_at").withAttributeType("S"));
 
         List<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
-        keySchema.add(new KeySchemaElement().withAttributeName("email").withKeyType(KeyType.HASH));
+        keySchema.add(new KeySchemaElement().withAttributeName("hash").withKeyType(KeyType.HASH));
+        //keySchema.add(new KeySchemaElement().withAttributeName("created_at").withKeyType(KeyType.RANGE));
 
         CreateTableRequest request = new CreateTableRequest()
                 .withTableName(tableName)

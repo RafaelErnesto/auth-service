@@ -5,4 +5,5 @@ import io.smallrye.config.ConfigMapping;
 @ConfigMapping(prefix = "auth")
 public interface AuthConfigProperties {
     public String userTableName();
+    public String confirmationHashTableName();
 }

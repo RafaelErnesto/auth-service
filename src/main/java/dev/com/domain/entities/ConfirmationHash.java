@@ -7,13 +7,17 @@ import java.util.UUID;
 public class ConfirmationHash {
     String value;
     HashStatus status;
-
     String userId;
 
-    public ConfirmationHash(User user){
+    public ConfirmationHash(String value, String userId){
+        this.value = value;
+        this.userId = userId;
+    }
+
+    public ConfirmationHash(String userId){
         status = HashStatus.VALID;
         value = generateHash();
-        userId = user.getUserId();
+        this.userId = userId;
     }
 
     public String getValue() {
@@ -28,8 +32,15 @@ public class ConfirmationHash {
     public void setInvalid() {
         status = HashStatus.INVALID;
     }
+    public String getUserId(){
+        return userId;
+    }
 
+    public void setStatus(HashStatus status){
+        this.status = status;
+    }
     private String generateHash(){
         return  UUID.randomUUID().toString();
     }
+
 }

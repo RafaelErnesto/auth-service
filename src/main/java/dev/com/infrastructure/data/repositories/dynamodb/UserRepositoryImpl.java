@@ -22,7 +22,6 @@ public class UserRepositoryImpl implements Repository<User> {
     @Inject
     DynamoDbClient dynamoDB;
 
-
     @Inject
     AuthConfigProperties authConfigProperties;
 
@@ -39,7 +38,7 @@ public class UserRepositoryImpl implements Repository<User> {
     public <String> User get(String key) {
         GetItemRequest getRequest = getRequest((java.lang.String) key);
         GetItemResponse response = dynamoDB.getItem(getRequest);
-        if(response.hasItem()){
+        if (response.hasItem()) {
             Map<java.lang.String, AttributeValue> item = response.item();
             return UserMapper.toUser(item);
         }
