@@ -35,8 +35,8 @@ public class ConfirmationHashRepositoryImpl implements Repository<ConfirmationHa
     }
 
     @Override
-    public <String> ConfirmationHash get(String key) {
-        GetItemRequest getRequest = getRequest((java.lang.String) key);
+    public ConfirmationHash get(String key) {
+        GetItemRequest getRequest = getRequest(key);
         GetItemResponse response = dynamoDB.getItem(getRequest);
         if (response.hasItem()) {
             Map<java.lang.String, AttributeValue> item = response.item();

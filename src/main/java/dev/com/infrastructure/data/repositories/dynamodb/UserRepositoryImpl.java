@@ -35,8 +35,8 @@ public class UserRepositoryImpl implements Repository<User> {
     }
 
     @Override
-    public <String> User get(String key) {
-        GetItemRequest getRequest = getRequest((java.lang.String) key);
+    public User get(String key) {
+        GetItemRequest getRequest = getRequest(key);
         GetItemResponse response = dynamoDB.getItem(getRequest);
         if (response.hasItem()) {
             Map<java.lang.String, AttributeValue> item = response.item();

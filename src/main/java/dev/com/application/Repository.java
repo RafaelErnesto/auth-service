@@ -4,5 +4,5 @@ public interface Repository<T> {
 
     void insert(T input);
 
-    <I> T get(I key);
+    T get(String key);
 }
