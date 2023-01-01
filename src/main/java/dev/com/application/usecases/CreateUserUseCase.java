@@ -1,12 +1,10 @@
 package dev.com.application.usecases;
 
-import dev.com.application.Repository;
 import dev.com.domain.entities.User;
 import dev.com.infrastructure.data.repositories.dynamodb.UserRepositoryImpl;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 @ApplicationScoped
 public class CreateUserUseCase {

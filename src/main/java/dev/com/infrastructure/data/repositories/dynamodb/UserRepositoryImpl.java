@@ -49,6 +49,7 @@ public class UserRepositoryImpl implements Repository<User> {
     protected GetItemRequest getRequest(String email) {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("email", AttributeValue.builder().s(email).build());
+        key.put("status", AttributeValue.builder().s(UserStatus.ACTIVE.name()).build());
 
         return GetItemRequest.builder()
                 .tableName(getTableName())

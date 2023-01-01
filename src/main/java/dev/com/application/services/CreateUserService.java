@@ -21,13 +21,13 @@ public class CreateUserService {
     @Inject
     UserCreationEventEmitter userCreationEventEmitter;
 
-    public void execute(User input){
+    public void execute(User user){
         try{
-            createUserUseCase.execute(input);
-            ConfirmationHash confirmationHash = createConfirmationHashUseCase.execute(input);
+            createUserUseCase.execute(user);
+            ConfirmationHash confirmationHash = createConfirmationHashUseCase.execute(user);
             userCreationEventEmitter.execute(confirmationHash);
         }catch(Exception ex){
-            throw new CreateUserException("Error while creating the user");
+            throw new CreateUserException("Error while creating the user, please contact the support team or try again later");
         }
     }
 }
