@@ -1,6 +1,5 @@
 package dev.com.application.services;
 
-import dev.com.application.exceptions.CreateUserException;
 import dev.com.application.usecases.CreateConfirmationHashUseCase;
 import dev.com.application.usecases.CreateUserUseCase;
 import dev.com.application.usecases.UserCreationEventEmitter;
@@ -21,13 +20,9 @@ public class CreateUserService {
     @Inject
     UserCreationEventEmitter userCreationEventEmitter;
 
-    public void execute(User user){
-        try{
-            createUserUseCase.execute(user);
-            ConfirmationHash confirmationHash = createConfirmationHashUseCase.execute(user);
-            userCreationEventEmitter.execute(confirmationHash);
-        }catch(Exception ex){
-            throw new CreateUserException("Error while creating the user, please contact the support team or try again later");
-        }
+    public void execute(User user) {
+        createUserUseCase.execute(user);
+        ConfirmationHash confirmationHash = createConfirmationHashUseCase.execute(user);
+        userCreationEventEmitter.execute(confirmationHash);
     }
 }

@@ -17,7 +17,7 @@ public class CreateUserRequestDto {
     String email;
 
     @JsonProperty(value = "password")
-    @Size(min = 10, message = "Password must have at least 8 digits")
+    @Size(min = 8, message = "Password must have at least 8 digits")
     String password;
 
     public User toUser(){
