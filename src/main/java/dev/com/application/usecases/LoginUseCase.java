@@ -23,7 +23,7 @@ public class LoginUseCase {
 
     private User findUser(User user) {
         User foundUser = userRepository.get(user.getEmail());
-        if (foundUser == null || user.getPassword() != foundUser.getPassword()) {
+        if (foundUser == null || !user.getPassword().equals(foundUser.getPassword())) {
             throw new RuntimeException("Incorrect email or password!");
         }
         return foundUser;

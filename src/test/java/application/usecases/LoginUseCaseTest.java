@@ -13,6 +13,8 @@ import org.mockito.Mockito;
 
 import javax.inject.Inject;
 
+import static org.mockito.ArgumentMatchers.any;
+
 @QuarkusTest
 public class LoginUseCaseTest {
 
@@ -24,16 +26,23 @@ public class LoginUseCaseTest {
 
     @Test
     public void whenUserWasNotFoundThrows(){
-        Mockito.when(repository.get(Mockito.any())).thenReturn(null);
-        Assertions.assertThrows(RuntimeException.class, () -> {loginUseCase.execute(Mockito.any());});
+        Mockito.when(repository.get(any())).thenReturn(null);
+        Assertions.assertThrows(RuntimeException.class, () -> {loginUseCase.execute(new User("dummy","dummy@mail.com","12345678"));});
     }
 
+    @Test
+    public void whenPasswordIsNotCorrectThenThrows(){
+        User mockedUser = new User("dummy", "dummy@mail.com", "00000000");
+        LoginRequestDto mockedRequest = new LoginRequestDto("dummy@mail.com","12345678");
+        Mockito.when(repository.get(any())).thenReturn(mockedUser);
+        Assertions.assertThrows(RuntimeException.class, () -> {loginUseCase.execute(mockedRequest.toUser());});
+    }
 
     @Test
     public void whenEmailAndPasswordIsCorrectReturnsToken(){
-        User mockedUser = new User("dummy", "dummy@mail.com", "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92");
-        LoginRequestDto mockedRequest = new LoginRequestDto("dummy@mail.com","123456");
-        Mockito.when(repository.get(Mockito.any())).thenReturn(mockedUser);
+        User mockedUser = new User("dummy", "dummy@mail.com", "12345678");
+        LoginRequestDto mockedRequest = new LoginRequestDto("dummy@mail.com","12345678");
+        Mockito.when(repository.get(any())).thenReturn(mockedUser);
         LoginResponseDto response = loginUseCase.execute(mockedRequest.toUser());
         Assertions.assertTrue(response.getToken().length() > 0);
         Assertions.assertTrue(response.getRefreshToken().length() > 0);
