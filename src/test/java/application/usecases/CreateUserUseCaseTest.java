@@ -1,6 +1,7 @@
 package application.usecases;
 
 import dev.com.application.usecases.CreateUserUseCase;
+import dev.com.common.exception.customexceptions.UserExistsException;
 import dev.com.domain.entities.User;
 import dev.com.infrastructure.data.repositories.dynamodb.UserRepositoryImpl;
 import io.quarkus.test.junit.QuarkusTest;
@@ -24,12 +25,12 @@ public class CreateUserUseCaseTest {
     void addUserThrowsWhenUserExists(){
         User user = new User("Joseph", "j@mail.com","123456");
         Mockito.when(userRepository.get(user.getEmail())).thenReturn(user);
-        Assertions.assertThrows(Exception.class, () -> createUserUseCase.execute(user));
+        Assertions.assertThrows(UserExistsException.class, () -> createUserUseCase.execute(user));
     }
 
     @Test
     void addUserInsertsWhenUserIsOK(){
-        User user = new User("Joseph", "j@mail.com","123456");
+        User user = new User("Joseph", "j@mail.com","12345678");
         Mockito.when(userRepository.get(user.getEmail())).thenReturn(null);
         createUserUseCase.execute(user);
         Mockito.verify(userRepository).insert(user);
