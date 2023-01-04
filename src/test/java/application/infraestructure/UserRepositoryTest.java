@@ -13,7 +13,7 @@ import javax.inject.Inject;
 
 
 @QuarkusTest
-@QuarkusTestResource(UsersDynamoDbTableTestResourceLifeCycleManager.class)
+@QuarkusTestResource(value = UsersDynamoDbTableTestResourceLifeCycleManager.class, restrictToAnnotatedClass = true)
 public class UserRepositoryTest {
 
     @Inject

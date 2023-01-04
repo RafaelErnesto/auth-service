@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 
 @QuarkusTest
-@QuarkusTestResource(ConfirmationHashDynamoDbTableTestResourceLifeCycManager.class)
+@QuarkusTestResource(value = ConfirmationHashDynamoDbTableTestResourceLifeCycManager.class, restrictToAnnotatedClass = true)
 public class ConfirmationHashRepositoryTest {
     @Inject
     ConfirmationHashRepositoryImpl confirmationHashRepository;
