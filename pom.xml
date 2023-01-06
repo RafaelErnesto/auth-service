@@ -14,7 +14,7 @@
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <quarkus.platform.version>2.11.2.Final</quarkus.platform.version>
     <skipITs>true</skipITs>
-    <surefire-plugin.version>3.0.0-M7</surefire-plugin.version>
+    <surefire-plugin.version>2.22.0</surefire-plugin.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -99,6 +99,11 @@
       <version>1.17.6</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-openapi</artifactId>
+    </dependency>
+
 
   </dependencies>
   <build>
@@ -151,6 +156,7 @@
                 <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                 <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                 <maven.home>${maven.home}</maven.home>
+                <useSystemClassLoader>false</useSystemClassLoader>
               </systemPropertyVariables>
             </configuration>
           </execution>
@@ -158,6 +164,7 @@
       </plugin>
     </plugins>
   </build>
+
   <profiles>
     <profile>
       <id>native</id>
