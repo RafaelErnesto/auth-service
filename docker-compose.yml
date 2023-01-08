@@ -14,12 +14,12 @@ services:
       - auth-service-dynamo
     environment:
       AWS_DEFAULT_PROFILE: default
-      AWS_DYNAMO_TABLE_NAME: auth-service
+      AWS_DYNAMO_TABLE_NAME: user
       AWS_ENDPOINT_URL: http://auth-service-dynamo:8000
     entrypoint: /bin/bash -c
     volumes:
       - './local-database:/local-database'
-    command: | 
+    command: |
       - /local-database/create-user-table.sh
       - /local-database/create-confirmation-hash-table.sh
     network_mode: service:auth-service-dynamo
