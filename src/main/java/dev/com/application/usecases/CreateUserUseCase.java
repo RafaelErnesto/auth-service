@@ -21,7 +21,7 @@ public class CreateUserUseCase {
     }
 
     private boolean userAlreadyExists(String email){
-        User userFound = userRepository.get(email);
+        User userFound = userRepository.getPendingUser(email);
         return userFound != null;
     }
 }

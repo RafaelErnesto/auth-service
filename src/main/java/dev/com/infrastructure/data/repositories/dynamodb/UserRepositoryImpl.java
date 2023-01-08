@@ -31,18 +31,28 @@ public class UserRepositoryImpl implements Repository<User> {
 
     @Override
     public void insert(User input) {
-        dynamoDB.putItem(putRequest(input));
+        dynamoDB.putItem(putRequest(input, UserStatus.PENDING));
     }
 
     @Override
-    public User get(String key) {
-        GetItemRequest getRequest = getRequest(key);
+    public User get(String email) {
+        GetItemRequest getRequest = getRequest(email, UserStatus.ACTIVE);
         GetItemResponse response = dynamoDB.getItem(getRequest);
         if (response.hasItem()) {
             Map<java.lang.String, AttributeValue> item = response.item();
             return UserMapper.toUser(item);
         }
        return null;
+    }
+
+    public User getPendingUser(String email) {
+        GetItemRequest getRequest = getRequest(email, UserStatus.PENDING);
+        GetItemResponse response = dynamoDB.getItem(getRequest);
+        if (response.hasItem()) {
+            Map<java.lang.String, AttributeValue> item = response.item();
+            return UserMapper.toUser(item);
+        }
+        return null;
     }
 
     @Override
@@ -60,22 +70,22 @@ public class UserRepositoryImpl implements Repository<User> {
     }
 
 
-    protected GetItemRequest getRequest(String email) {
+    protected GetItemRequest getRequest(String email, UserStatus status) {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("email", AttributeValue.builder().s(email).build());
-
+        key.put("status", AttributeValue.builder().s(status.name()).build());
         return GetItemRequest.builder()
                 .tableName(getTableName())
                 .key(key)
                 .build();
     }
 
-    private PutItemRequest putRequest(User user) {
+    private PutItemRequest putRequest(User user, UserStatus status) {
         Map<String, AttributeValue> item = new HashMap<>();
         item.put("email", AttributeValue.builder().s(user.getEmail()).build());
         item.put("name", AttributeValue.builder().s(user.getName()).build());
         item.put("password", AttributeValue.builder().s(user.getPassword()).build());
-        item.put("status", AttributeValue.builder().s(UserStatus.PENDING.name()).build());
+        item.put("status", AttributeValue.builder().s(status.name()).build());
         item.put("user_id", AttributeValue.builder().s(user.getUserId()).build());
         item.put("created_at", AttributeValue.builder().s(LocalDateTime.now().toString()).build());
 
