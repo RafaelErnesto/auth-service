@@ -20,6 +20,7 @@ services:
     volumes:
       - './local-database:/local-database'
     command: | 
-      - /local-database/initialize.sh
+      - /local-database/create-user-table.sh
+      - /local-database/create-confirmation-hash-table.sh
     network_mode: service:auth-service-dynamo
 
