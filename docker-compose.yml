@@ -19,8 +19,9 @@ services:
     entrypoint: /bin/bash -c
     volumes:
       - './local-database:/local-database'
-    command: |
-      - /local-database/create-user-table.sh
-      - /local-database/create-confirmation-hash-table.sh
+    command:
+      - | 
+        /local-database/create-user-table.sh
+        /local-database/create-confirmation-hash-table.sh
     network_mode: service:auth-service-dynamo
 
