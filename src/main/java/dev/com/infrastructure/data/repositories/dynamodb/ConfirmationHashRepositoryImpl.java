@@ -45,6 +45,16 @@ public class ConfirmationHashRepositoryImpl implements Repository<ConfirmationHa
         throw new RuntimeException("Hash not found");
     }
 
+    @Override
+    public void update(ConfirmationHash input) {
+
+    }
+
+    @Override
+    public void delete(ConfirmationHash input) {
+
+    }
+
     protected GetItemRequest getRequest(String hash) {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("hash", AttributeValue.builder().s(hash).build());

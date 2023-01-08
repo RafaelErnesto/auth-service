@@ -45,6 +45,20 @@ public class UserRepositoryImpl implements Repository<User> {
        return null;
     }
 
+    @Override
+    public void update(User input) {
+
+    }
+
+    @Override
+    public void delete(User input) {
+
+    }
+
+    public void updateStatus(UserStatus status) {
+
+    }
+
 
     protected GetItemRequest getRequest(String email) {
         Map<String, AttributeValue> key = new HashMap<>();

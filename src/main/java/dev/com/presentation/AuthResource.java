@@ -1,7 +1,9 @@
 package dev.com.presentation;
 
+import dev.com.application.services.ConfirmUserCreationService;
 import dev.com.application.services.CreateUserService;
 import dev.com.application.usecases.*;
+import dev.com.presentation.dtos.ConfirmUserCreationRequestDto;
 import dev.com.presentation.dtos.CreateUserRequestDto;
 import dev.com.presentation.dtos.LoginRequestDto;
 import dev.com.application.usecases.dtos.LoginResponseDto;
@@ -23,6 +25,9 @@ public class AuthResource {
     @Inject
     CreateUserService createUserService;
 
+    @Inject
+    ConfirmUserCreationService confirmUserCreationService;
+
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -34,8 +39,15 @@ public class AuthResource {
     @POST
     @Path("/user")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     public void create(@Valid CreateUserRequestDto request) {
         createUserService.execute(request.toUser());
+    }
+
+    @POST
+    @Path("/confirm-user-creation")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public void confirmUserCreation(@Valid ConfirmUserCreationRequestDto request) {
+        confirmUserCreationService.execute(request.hash);
     }
 }
