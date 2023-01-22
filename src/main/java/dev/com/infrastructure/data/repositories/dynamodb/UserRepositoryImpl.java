@@ -13,7 +13,9 @@ import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ApplicationScoped
@@ -36,7 +38,7 @@ public class UserRepositoryImpl implements Repository<User> {
 
     @Override
     public User get(String email) {
-        GetItemRequest getRequest = getRequest(email, UserStatus.ACTIVE);
+        GetItemRequest getRequest = createGetRequest(email, List.of(UserStatus.ACTIVE));
         GetItemResponse response = dynamoDB.getItem(getRequest);
         if (response.hasItem()) {
             Map<java.lang.String, AttributeValue> item = response.item();
@@ -45,8 +47,18 @@ public class UserRepositoryImpl implements Repository<User> {
        return null;
     }
 
-    public User getPendingUser(String email) {
-        GetItemRequest getRequest = getRequest(email, UserStatus.PENDING);
+    public User getPendingUserByEmail(String email) {
+        GetItemRequest getRequest = createGetRequest(email, List.of(UserStatus.PENDING));
+        GetItemResponse response = dynamoDB.getItem(getRequest);
+        if (response.hasItem()) {
+            Map<java.lang.String, AttributeValue> item = response.item();
+            return UserMapper.toUser(item);
+        }
+        return null;
+    }
+
+    public User getPendingOrActiveUserByEmail(String email) {
+        GetItemRequest getRequest = createGetRequest(email, List.of(UserStatus.ACTIVE, UserStatus.PENDING));
         GetItemResponse response = dynamoDB.getItem(getRequest);
         if (response.hasItem()) {
             Map<java.lang.String, AttributeValue> item = response.item();
@@ -70,10 +82,10 @@ public class UserRepositoryImpl implements Repository<User> {
     }
 
 
-    protected GetItemRequest getRequest(String email, UserStatus status) {
+    protected GetItemRequest createGetRequest(String email, List<UserStatus> statusList) {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("email", AttributeValue.builder().s(email).build());
-        key.put("status", AttributeValue.builder().s(status.name()).build());
+        //key.put("status", AttributeValue.builder().s(status.name()).build());
         return GetItemRequest.builder()
                 .tableName(getTableName())
                 .key(key)
