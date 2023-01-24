@@ -32,9 +32,11 @@ public class UsersDynamoDbTableTestResourceLifeCycleManager extends DynamoDbLife
 
         List<AttributeDefinition> attributeDefinitions= new ArrayList<AttributeDefinition>();
         attributeDefinitions.add(new AttributeDefinition().withAttributeName("email").withAttributeType("S"));
+        attributeDefinitions.add(new AttributeDefinition().withAttributeName("status").withAttributeType("S"));
 
         List<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
         keySchema.add(new KeySchemaElement().withAttributeName("email").withKeyType(KeyType.HASH));
+        keySchema.add(new KeySchemaElement().withAttributeName("status").withKeyType(KeyType.RANGE));
 
         CreateTableRequest request = new CreateTableRequest()
                 .withTableName(tableName)

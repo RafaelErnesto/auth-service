@@ -24,7 +24,7 @@ public class UserRepositoryTest {
         User user = new User("Dummy","dummy@email.com","12345678");
         userRepository.insert(user);
 
-        User insertedUser = userRepository.get("dummy@email.com");
+        User insertedUser = userRepository.getPendingUserByEmail("dummy@email.com");
         Assertions.assertEquals(user.getUserId(), insertedUser.getUserId());
         Assertions.assertEquals(user.getEmail(), insertedUser.getEmail());
         Assertions.assertEquals(user.getName(), insertedUser.getName());
