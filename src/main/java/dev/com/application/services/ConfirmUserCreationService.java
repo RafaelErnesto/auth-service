@@ -1,7 +1,7 @@
 package dev.com.application.services;
 
-import dev.com.domain.UserStatus;
 import dev.com.domain.entities.ConfirmationHash;
+import dev.com.domain.entities.User;
 import dev.com.infrastructure.data.repositories.dynamodb.ConfirmationHashRepositoryImpl;
 import dev.com.infrastructure.data.repositories.dynamodb.UserRepositoryImpl;
 

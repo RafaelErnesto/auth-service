@@ -57,12 +57,30 @@ public class UsersDynamoDbTableTestResourceLifeCycleManager extends DynamoDbLife
 
         emailStatusIndex.setKeySchema(emailStatusIndexKeySchema);
 
+        GlobalSecondaryIndex userIdStatusIndex = new GlobalSecondaryIndex()
+                .withIndexName("id-status-index")
+                .withProvisionedThroughput(new ProvisionedThroughput()
+                        .withReadCapacityUnits(1L)
+                        .withWriteCapacityUnits(1L))
+                .withProjection(new Projection().withProjectionType(ProjectionType.ALL));
+
+        ArrayList<KeySchemaElement> userIdStatusIndexKeySchema = new ArrayList<>();
+
+        userIdStatusIndexKeySchema.add(new KeySchemaElement()
+                .withAttributeName("user_id")
+                .withKeyType(KeyType.HASH));
+        userIdStatusIndexKeySchema.add(new KeySchemaElement()
+                .withAttributeName("user_status")
+                .withKeyType(KeyType.RANGE));
+
+        userIdStatusIndex.setKeySchema(userIdStatusIndexKeySchema);
+
 
         CreateTableRequest request = new CreateTableRequest()
                 .withTableName(tableName)
                 .withKeySchema(keySchema)
                 .withAttributeDefinitions(attributeDefinitions)
-                .withGlobalSecondaryIndexes(emailStatusIndex)
+                .withGlobalSecondaryIndexes(emailStatusIndex, userIdStatusIndex)
                 .withProvisionedThroughput(new ProvisionedThroughput()
                         .withReadCapacityUnits(5L)
                         .withWriteCapacityUnits(6L));
