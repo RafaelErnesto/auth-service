@@ -22,10 +22,10 @@ public class UserRepositoryTest {
 
     @Test
     void whenInsertingAUserItsStatusMustBePending(){
-        User user = new User("Dummy","dummy@email.com","12345678");
+        User user = new User("Dummy","dummy1@email.com","12345678");
         userRepository.insert(user);
 
-        User insertedUser = userRepository.getPendingUserByEmail("dummy@email.com");
+        User insertedUser = userRepository.getPendingUserByEmail("dummy1@email.com");
         Assertions.assertEquals(user.getUserId(), insertedUser.getUserId());
         Assertions.assertEquals(user.getEmail(), insertedUser.getEmail());
         Assertions.assertEquals(user.getName(), insertedUser.getName());
@@ -34,11 +34,11 @@ public class UserRepositoryTest {
 
     @Test
     void whenSetUserAsActiveTheStatusMustBeActive(){
-        User user = new User("Dummy","dummy@email.com","12345678");
+        User user = new User("Dummy","dummy2@email.com","12345678");
         userRepository.insert(user);
 
-        userRepository.setUserToActive("dummy@email.com");
-        User activeUser = userRepository.get("dummy@email.com");
+        userRepository.setUserToActive("dummy2@email.com");
+        User activeUser = userRepository.get("dummy2@email.com");
         Assertions.assertEquals(user.getUserId(), activeUser.getUserId());
         Assertions.assertEquals(user.getEmail(), activeUser.getEmail());
         Assertions.assertEquals(user.getName(), activeUser.getName());
@@ -47,6 +47,13 @@ public class UserRepositoryTest {
 
     @Test
     void whenSetANonExistentUserAsActiveMustThrow(){
-        Assertions.assertThrows(RuntimeException.class, () -> userRepository.setUserToActive("dummy@email.com"));
+        Assertions.assertThrows(RuntimeException.class, () -> userRepository.setUserToActive("dummy3@email.com"));
+    }
+
+    @Test
+    void whenTryToInsertAnExistentUserThatIsPendingMustThrow(){
+        User user = new User("Dummy","dummy4@email.com","12345678");
+        userRepository.insert(user);
+        Assertions.assertThrows(RuntimeException.class, () -> userRepository.insert(user));
     }
 }

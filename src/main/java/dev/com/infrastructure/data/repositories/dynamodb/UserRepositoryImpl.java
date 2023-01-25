@@ -1,9 +1,6 @@
 package dev.com.infrastructure.data.repositories.dynamodb;
 
 
-import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
-import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
-import com.amazonaws.services.dynamodbv2.xspec.S;
 import dev.com.application.Repository;
 import dev.com.domain.UserStatus;
 import dev.com.domain.entities.User;
@@ -14,7 +11,6 @@ import software.amazon.awssdk.services.dynamodb.model.*;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +31,10 @@ public class UserRepositoryImpl implements Repository<User> {
 
     @Override
     public void insert(User input) {
+        User userFound = getPendingOrActiveUserByEmail(input.getEmail());
+        if(userFound != null) {
+            throw new RuntimeException("User already exists");
+        }
         dynamoDB.putItem(putRequest(input, UserStatus.PENDING));
     }
 
@@ -68,14 +68,14 @@ public class UserRepositoryImpl implements Repository<User> {
         QueryRequest queryRequest = createQueryRequestByStatusIndex(email);
         QueryResponse response = dynamoDB.query(queryRequest);
         List<UserStatus> statusList = List.of(UserStatus.ACTIVE, UserStatus.PENDING);
-        if (response.hasItems()) {
-            return response.items()
+
+        List<User> userList = response.items()
                     .stream()
                     .map(item -> UserMapper.toUser(item))
                     .filter(user -> statusList.contains(user.getStatus()))
-                    .collect(Collectors.toList()).get(0);
-        }
-        return null;
+                    .collect(Collectors.toList());
+
+        return userList.isEmpty() ? null : userList.get(0);
     }
 
     @Override
