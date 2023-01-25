@@ -58,7 +58,7 @@ public class UsersDynamoDbTableTestResourceLifeCycleManager extends DynamoDbLife
         emailStatusIndex.setKeySchema(emailStatusIndexKeySchema);
 
         GlobalSecondaryIndex userIdStatusIndex = new GlobalSecondaryIndex()
-                .withIndexName("id-status-index")
+                .withIndexName("userid-status-index")
                 .withProvisionedThroughput(new ProvisionedThroughput()
                         .withReadCapacityUnits(1L)
                         .withWriteCapacityUnits(1L))

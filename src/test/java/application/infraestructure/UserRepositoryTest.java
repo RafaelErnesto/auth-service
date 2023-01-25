@@ -81,4 +81,14 @@ public class UserRepositoryTest {
         Assertions.assertNull(inactiveUser);
     }
 
+    @Test
+    void wheAnUserIsActiveThenGetByIdMustReturn(){
+        User user = new User("Dummy","dummy8@email.com","12345678");
+        userRepository.insert(user);
+        userRepository.setUserToActive("dummy8@email.com");
+        User userFound = userRepository.getActiveUserById(user.getUserId());
+        Assertions.assertEquals(user.getUserId(), userFound.getUserId());
+        Assertions.assertEquals(UserStatus.ACTIVE, userFound.getStatus());
+    }
+
 }

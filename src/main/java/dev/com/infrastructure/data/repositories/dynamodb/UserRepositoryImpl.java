@@ -50,6 +50,18 @@ public class UserRepositoryImpl implements Repository<User> {
         return userList.isEmpty() ? null : userList.get(0);
     }
 
+
+    public User getActiveUserById(String userId) {
+        QueryRequest queryRequest = createQueryRequestByUserIdIndex(userId);
+        QueryResponse response = dynamoDB.query(queryRequest);
+        List<User> userList = response.items()
+                .stream().map(item -> UserMapper.toUser(item))
+                .filter(user -> user.getStatus().equals(UserStatus.ACTIVE))
+                .collect(Collectors.toList());
+
+        return userList.isEmpty() ? null : userList.get(0);
+    }
+
     public User getPendingUserByEmail(String email) {
         QueryRequest queryRequest = createQueryRequestByStatusIndex(email);
         QueryResponse response = dynamoDB.query(queryRequest);
@@ -126,6 +138,18 @@ public class UserRepositoryImpl implements Repository<User> {
                 .keyConditionExpression("email = :email")
                 .expressionAttributeValues(Map.of(
                         ":email", AttributeValue.builder().s(email).build()))
+                .scanIndexForward(true)
+                .build();
+    }
+
+    protected QueryRequest createQueryRequestByUserIdIndex(String userId) {
+
+        return QueryRequest.builder()
+                .tableName(getTableName())
+                .indexName("userid-status-index")
+                .keyConditionExpression("user_id = :user_id")
+                .expressionAttributeValues(Map.of(
+                        ":user_id", AttributeValue.builder().s(userId).build()))
                 .scanIndexForward(true)
                 .build();
     }
