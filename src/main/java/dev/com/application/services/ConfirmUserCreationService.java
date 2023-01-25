@@ -18,7 +18,7 @@ public class ConfirmUserCreationService {
 
     public void execute(String hash){
         ConfirmationHash hashFound = confirmationHashRepository.get(hash);
-        userRepository.updateStatus(UserStatus.ACTIVE);
+        userRepository.setUserToActive("");
         confirmationHashRepository.delete(hashFound);
     }
 }

@@ -32,16 +32,37 @@ public class UsersDynamoDbTableTestResourceLifeCycleManager extends DynamoDbLife
 
         List<AttributeDefinition> attributeDefinitions= new ArrayList<AttributeDefinition>();
         attributeDefinitions.add(new AttributeDefinition().withAttributeName("email").withAttributeType("S"));
-        attributeDefinitions.add(new AttributeDefinition().withAttributeName("status").withAttributeType("S"));
+        attributeDefinitions.add(new AttributeDefinition().withAttributeName("user_id").withAttributeType("S"));
+        attributeDefinitions.add(new AttributeDefinition().withAttributeName("user_status").withAttributeType("S"));
 
         List<KeySchemaElement> keySchema = new ArrayList<KeySchemaElement>();
         keySchema.add(new KeySchemaElement().withAttributeName("email").withKeyType(KeyType.HASH));
-        keySchema.add(new KeySchemaElement().withAttributeName("status").withKeyType(KeyType.RANGE));
+        keySchema.add(new KeySchemaElement().withAttributeName("user_id").withKeyType(KeyType.RANGE));
+
+        GlobalSecondaryIndex emailStatusIndex = new GlobalSecondaryIndex()
+                .withIndexName("email-status-index")
+                .withProvisionedThroughput(new ProvisionedThroughput()
+                        .withReadCapacityUnits(1L)
+                        .withWriteCapacityUnits(1L))
+                .withProjection(new Projection().withProjectionType(ProjectionType.ALL));
+
+        ArrayList<KeySchemaElement> emailStatusIndexKeySchema = new ArrayList<>();
+
+        emailStatusIndexKeySchema.add(new KeySchemaElement()
+                .withAttributeName("email")
+                .withKeyType(KeyType.HASH));
+        emailStatusIndexKeySchema.add(new KeySchemaElement()
+                .withAttributeName("user_status")
+                .withKeyType(KeyType.RANGE));
+
+        emailStatusIndex.setKeySchema(emailStatusIndexKeySchema);
+
 
         CreateTableRequest request = new CreateTableRequest()
                 .withTableName(tableName)
                 .withKeySchema(keySchema)
                 .withAttributeDefinitions(attributeDefinitions)
+                .withGlobalSecondaryIndexes(emailStatusIndex)
                 .withProvisionedThroughput(new ProvisionedThroughput()
                         .withReadCapacityUnits(5L)
                         .withWriteCapacityUnits(6L));

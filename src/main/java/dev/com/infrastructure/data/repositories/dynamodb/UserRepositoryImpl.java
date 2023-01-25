@@ -1,6 +1,9 @@
 package dev.com.infrastructure.data.repositories.dynamodb;
 
 
+import com.amazonaws.services.dynamodbv2.document.spec.QuerySpec;
+import com.amazonaws.services.dynamodbv2.document.utils.ValueMap;
+import com.amazonaws.services.dynamodbv2.xspec.S;
 import dev.com.application.Repository;
 import dev.com.domain.UserStatus;
 import dev.com.domain.entities.User;
@@ -37,33 +40,40 @@ public class UserRepositoryImpl implements Repository<User> {
 
     @Override
     public User get(String email) {
-        GetItemRequest getRequest = createGetRequest(email, UserStatus.ACTIVE);
-        GetItemResponse response = dynamoDB.getItem(getRequest);
-        if (response.hasItem()) {
-            Map<java.lang.String, AttributeValue> item = response.item();
-            return UserMapper.toUser(item);
-        }
-       return null;
-    }
-
-    public User getPendingUserByEmail(String email) {
-        GetItemRequest getRequest = createGetRequest(email, UserStatus.PENDING);
-        GetItemResponse response = dynamoDB.getItem(getRequest);
-        if (response.hasItem()) {
-            Map<java.lang.String, AttributeValue> item = response.item();
-            return UserMapper.toUser(item);
+        QueryRequest queryRequest = createQueryRequestByStatusIndex(email);
+        QueryResponse response = dynamoDB.query(queryRequest);
+        if (response.hasItems()) {
+            return response.items()
+                    .stream().map(item -> UserMapper.toUser(item))
+                    .filter(user -> user.getStatus().equals(UserStatus.ACTIVE))
+                    .collect(Collectors.toList()).get(0);
         }
         return null;
     }
 
-    public List<User> getPendingOrActiveUserByEmail(String email) {
-        QueryRequest queryRequest = createQueryRequest(email, List.of(UserStatus.ACTIVE, UserStatus.PENDING));
+    public User getPendingUserByEmail(String email) {
+        QueryRequest queryRequest = createQueryRequestByStatusIndex(email);
         QueryResponse response = dynamoDB.query(queryRequest);
         if (response.hasItems()) {
             return response.items()
                     .stream()
                     .map(item -> UserMapper.toUser(item))
-                    .collect(Collectors.toList());
+                    .filter(user -> user.getStatus().equals(UserStatus.PENDING))
+                    .collect(Collectors.toList()).get(0);
+        }
+        return null;
+    }
+
+    public User getPendingOrActiveUserByEmail(String email) {
+        QueryRequest queryRequest = createQueryRequestByStatusIndex(email);
+        QueryResponse response = dynamoDB.query(queryRequest);
+        List<UserStatus> statusList = List.of(UserStatus.ACTIVE, UserStatus.PENDING);
+        if (response.hasItems()) {
+            return response.items()
+                    .stream()
+                    .map(item -> UserMapper.toUser(item))
+                    .filter(user -> statusList.contains(user.getStatus()))
+                    .collect(Collectors.toList()).get(0);
         }
         return null;
     }
@@ -78,34 +88,39 @@ public class UserRepositoryImpl implements Repository<User> {
 
     }
 
-    public void updateStatus(UserStatus status) {
+    public void setUserToActive(String email) {
+        User foundUser = getPendingUserByEmail(email);
+        if(foundUser == null) {
+            throw new RuntimeException("User not found");
 
+        }
+        UpdateItemRequest updateItemRequest = createUpdateRequest(email,
+                foundUser.getUserId(),
+                "SET user_status = :status",
+                Map.of(":status", AttributeValue.builder().s(UserStatus.ACTIVE.toString()).build()));
+        dynamoDB.updateItem(updateItemRequest);
     }
 
 
-    protected GetItemRequest createGetRequest(String email, UserStatus status) {
+    protected GetItemRequest createGetRequest(String email, String userId) {
         Map<String, AttributeValue> key = new HashMap<>();
         key.put("email", AttributeValue.builder().s(email).build());
-        key.put("status", AttributeValue.builder().s(status.name()).build());
+        key.put("user_id", AttributeValue.builder().s(userId).build());
         return GetItemRequest.builder()
                 .tableName(getTableName())
                 .key(key)
                 .build();
     }
 
-    protected QueryRequest createQueryRequest(String email, List<UserStatus> statusList) {
-        Map<String, AttributeValue> keyExpressionValue = new HashMap<>();
-        keyExpressionValue.put("email", AttributeValue.builder().s(email).build());
-
-        Collection<AttributeValue> statusValues = statusList.stream()
-                .map(item -> AttributeValue.builder().s(item.toString()).build())
-                .collect(Collectors.toList());
-        keyExpressionValue.put(":status_list", AttributeValue.builder().l(statusValues).build());
+    protected QueryRequest createQueryRequestByStatusIndex(String email) {
 
         return QueryRequest.builder()
                 .tableName(getTableName())
-                .keyConditionExpression("email = :email and status in :status_list")
-                .expressionAttributeValues(keyExpressionValue)
+                .indexName("email-status-index")
+                .keyConditionExpression("email = :email")
+                .expressionAttributeValues(Map.of(
+                        ":email", AttributeValue.builder().s(email).build()))
+                .scanIndexForward(true)
                 .build();
     }
 
@@ -114,13 +129,26 @@ public class UserRepositoryImpl implements Repository<User> {
         item.put("email", AttributeValue.builder().s(user.getEmail()).build());
         item.put("name", AttributeValue.builder().s(user.getName()).build());
         item.put("password", AttributeValue.builder().s(user.getPassword()).build());
-        item.put("status", AttributeValue.builder().s(status.name()).build());
+        item.put("user_status", AttributeValue.builder().s(status.name()).build());
         item.put("user_id", AttributeValue.builder().s(user.getUserId()).build());
         item.put("created_at", AttributeValue.builder().s(LocalDateTime.now().toString()).build());
 
         return PutItemRequest.builder()
                 .tableName(getTableName())
                 .item(item)
+                .build();
+    }
+
+    private UpdateItemRequest createUpdateRequest(String email,String userId, String expression, Map<String, AttributeValue> updateAttributes) {
+        Map<String, AttributeValue> key = new HashMap<>();
+        key.put("email", AttributeValue.builder().s(email).build());
+        key.put("user_id", AttributeValue.builder().s(userId).build());
+
+        return UpdateItemRequest.builder()
+                .tableName(getTableName())
+                .key(key)
+                .updateExpression(expression)
+                .expressionAttributeValues(updateAttributes)
                 .build();
     }
 }

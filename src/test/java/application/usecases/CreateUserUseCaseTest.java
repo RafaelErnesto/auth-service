@@ -25,7 +25,7 @@ public class CreateUserUseCaseTest {
     @Test
     void addUserThrowsWhenUserExists(){
         User user = new User("Joseph", "j@mail.com","123456");
-        Mockito.when(userRepository.getPendingOrActiveUserByEmail(user.getEmail())).thenReturn(List.of(user));
+        Mockito.when(userRepository.getPendingOrActiveUserByEmail(user.getEmail())).thenReturn(user);
         Assertions.assertThrows(UserExistsException.class, () -> createUserUseCase.execute(user));
     }
 
