@@ -56,4 +56,12 @@ public class UserRepositoryTest {
         userRepository.insert(user);
         Assertions.assertThrows(RuntimeException.class, () -> userRepository.insert(user));
     }
+
+    @Test
+    void whenTryToInsertAnExistentUserThatIsActiveMustThrow(){
+        User user = new User("Dummy","dummy5@email.com","12345678");
+        userRepository.insert(user);
+        userRepository.setUserToActive("dummy5@email.com");
+        Assertions.assertThrows(RuntimeException.class, () -> userRepository.insert(user));
+    }
 }
