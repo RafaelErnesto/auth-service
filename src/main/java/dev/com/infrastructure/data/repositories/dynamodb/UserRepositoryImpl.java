@@ -53,14 +53,12 @@ public class UserRepositoryImpl implements Repository<User> {
     public User getPendingUserByEmail(String email) {
         QueryRequest queryRequest = createQueryRequestByStatusIndex(email);
         QueryResponse response = dynamoDB.query(queryRequest);
-        if (response.hasItems()) {
-            return response.items()
+        List<User> userList =  response.items()
                     .stream()
                     .map(item -> UserMapper.toUser(item))
                     .filter(user -> user.getStatus().equals(UserStatus.PENDING))
-                    .collect(Collectors.toList()).get(0);
-        }
-        return null;
+                    .collect(Collectors.toList());
+        return userList.isEmpty() ? null : userList.get(0);
     }
 
     public User getPendingOrActiveUserByEmail(String email) {
@@ -84,7 +82,7 @@ public class UserRepositoryImpl implements Repository<User> {
 
     @Override
     public void delete(User input) {
-        User foundUser = getPendingUserByEmail(input.getEmail());
+        User foundUser = getPendingOrActiveUserByEmail(input.getEmail());
         if(foundUser == null) {
             throw new RuntimeException("User not found");
         }

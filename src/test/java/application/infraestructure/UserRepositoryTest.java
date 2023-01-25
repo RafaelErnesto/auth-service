@@ -8,6 +8,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 
 import javax.inject.Inject;
@@ -69,6 +70,16 @@ public class UserRepositoryTest {
     void whenTryToDeleteANonExistentUserMustThrow(){
         User user = new User("Dummy","dummy6@email.com","12345678");
         Assertions.assertThrows(RuntimeException.class, () -> userRepository.delete(user));
+    }
+
+    @Test
+    void whenDeleteAnUserItMustBeSetToInactive(){
+        User user = new User("Dummy","dummy7@email.com","12345678");
+        userRepository.insert(user);
+        userRepository.setUserToActive("dummy7@email.com");
+        userRepository.delete(user);
+        User inactiveUser = userRepository.getPendingOrActiveUserByEmail(user.getEmail());
+        Assertions.assertNull(inactiveUser);
     }
 
 }
