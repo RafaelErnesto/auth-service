@@ -64,4 +64,11 @@ public class UserRepositoryTest {
         userRepository.setUserToActive("dummy5@email.com");
         Assertions.assertThrows(RuntimeException.class, () -> userRepository.insert(user));
     }
+
+    @Test
+    void whenTryToDeleteANonExistentUserMustThrow(){
+        User user = new User("Dummy","dummy6@email.com","12345678");
+        Assertions.assertThrows(RuntimeException.class, () -> userRepository.delete(user));
+    }
+
 }
