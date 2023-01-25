@@ -44,4 +44,9 @@ public class UserRepositoryTest {
         Assertions.assertEquals(user.getName(), activeUser.getName());
         Assertions.assertEquals(UserStatus.ACTIVE, activeUser.getStatus());
     }
+
+    @Test
+    void whenSetANonExistentUserAsActiveMustThrow(){
+        Assertions.assertThrows(RuntimeException.class, () -> userRepository.setUserToActive("dummy@email.com"));
+    }
 }
