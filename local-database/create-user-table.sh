@@ -11,8 +11,8 @@ echo "... CREATING User TABLE ......."
 aws dynamodb create-table --endpoint-url $AWS_ENDPOINT_URL \
     --table-name $AWS_DYNAMO_TABLE_NAME \
     --attribute-definitions AttributeName=email,AttributeType=S\
-      AttributeName=status,AttributeType=S\
+      AttributeName=user_id,AttributeType=S\
     --key-schema AttributeName=email,KeyType=HASH\
-      AttributeName=status,KeyType=RANGE\
+      AttributeName=user_id,KeyType=RANGE\
     --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
 fi
