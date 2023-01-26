@@ -51,12 +51,12 @@ public class UserRepositoryImpl implements Repository<User> {
     }
 
 
-    public User getActiveUserById(String userId) {
+    public User getUserById(String userId, UserStatus status) {
         QueryRequest queryRequest = createQueryRequestByUserIdIndex(userId);
         QueryResponse response = dynamoDB.query(queryRequest);
         List<User> userList = response.items()
                 .stream().map(item -> UserMapper.toUser(item))
-                .filter(user -> user.getStatus().equals(UserStatus.ACTIVE))
+                .filter(user -> user.getStatus().equals(status.ACTIVE))
                 .collect(Collectors.toList());
 
         return userList.isEmpty() ? null : userList.get(0);

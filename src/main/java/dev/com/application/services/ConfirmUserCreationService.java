@@ -1,5 +1,6 @@
 package dev.com.application.services;
 
+import dev.com.domain.UserStatus;
 import dev.com.domain.entities.ConfirmationHash;
 import dev.com.domain.entities.User;
 import dev.com.infrastructure.data.repositories.dynamodb.ConfirmationHashRepositoryImpl;
@@ -18,7 +19,8 @@ public class ConfirmUserCreationService {
 
     public void execute(String hash){
         ConfirmationHash hashFound = confirmationHashRepository.get(hash);
-        userRepository.setUserToActive("");
+        User user = userRepository.getUserById(hashFound.getUserId(), UserStatus.PENDING);
+        userRepository.setUserToActive(user.getEmail());
         confirmationHashRepository.delete(hashFound);
     }
 }

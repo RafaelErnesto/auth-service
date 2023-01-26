@@ -86,7 +86,7 @@ public class UserRepositoryTest {
         User user = new User("Dummy","dummy8@email.com","12345678");
         userRepository.insert(user);
         userRepository.setUserToActive("dummy8@email.com");
-        User userFound = userRepository.getActiveUserById(user.getUserId());
+        User userFound = userRepository.getUserById(user.getUserId(), UserStatus.ACTIVE);
         Assertions.assertEquals(user.getUserId(), userFound.getUserId());
         Assertions.assertEquals(UserStatus.ACTIVE, userFound.getStatus());
     }
@@ -95,7 +95,7 @@ public class UserRepositoryTest {
     void wheAnUserIsNotActiveThenGetActiveUserByIdMustReturnNull(){
         User user = new User("Dummy","dummy9@email.com","12345678");
         userRepository.insert(user);
-        User userFound = userRepository.getActiveUserById(user.getEmail());
+        User userFound = userRepository.getUserById(user.getEmail(), UserStatus.ACTIVE);
         Assertions.assertNull(userFound);
     }
 
